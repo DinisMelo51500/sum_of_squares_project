@@ -1,0 +1,69 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+
+entity TLAB3 is
+	port
+	(
+		MCLK   : in std_logic;
+		Rst    : in std_logic;
+		Step   : in std_logic;
+		Start  : in std_logic;
+		X	   : in std_logic_vector(3 downto 0);
+		Cy     : out std_logic;
+		sum	   : out std_logic_vector(7 downto 0);
+		HEX0, HEX1, HEX2 : out std_logic_vector(7 downto 0)
+	);
+end TLAB3;
+
+architecture structural of TLAB3 is
+
+component ASM is
+port(
+    reset       : in std_logic;
+    clk         : in std_logic;
+    start       : in std_logic;
+    step        : in std_logic;
+    E_Reg,R_Reg,Stp_Mux,E_ACC,R_ACC: out std_logic
+
+);
+end component;
+
+component datapath is
+	port(
+	xi: in std_logic_vector(3 downto 0);
+	clk: in std_logic;
+	E_Reg,R_Reg,Stp_Mux,E_ACC,R_ACC : in std_logic;
+	
+	R : out std_logic_vector(7 downto 0);
+	CY : out std_logic
+	);
+	
+end component;
+
+component decoderHex IS
+PORT (	bin: in std_logic_vector(7 downto 0);		
+	clear : in std_logic;
+	HEX0 : out std_logic_vector(7 downto 0);
+	HEX1 : out std_logic_vector(7 downto 0);
+	HEX2 : out std_logic_vector(7 downto 0)
+);		
+END component;
+
+signal E_Reg_S,R_Reg_S,Stp_Mux_S,E_ACC_S,R_ACC_S,CY_S: std_logic;
+signal R_S,HEX0_S,HEX1_S,HEX2_S : std_logic_vector(7 downto 0);
+signal stepDE10 : std_logic;
+begin
+stepDE10<= not(Step);
+U0 : ASM port map(reset=>Rst,clk=>MCLK,start=>Start,step=>stepDE10,E_Reg=>E_Reg_S,R_Reg=>R_Reg_S,Stp_Mux=>Stp_Mux_S,E_ACC=>E_ACC_S,R_ACC=>R_ACC_S);
+U1 : datapath port map(xi=>X,clk=>MCLK,E_Reg=>E_Reg_S,R_Reg=>R_Reg_S,Stp_Mux=>Stp_Mux_S,E_ACC=>E_ACC_S,R_ACC=>R_ACC_S,R=>R_S,CY=>CY_S);
+U2 : decoderHex port map(bin=>R_S,clear=>'0',HEX0=>HEX0_S,HEX1=>HEX1_S,HEX2=>HEX2_S);
+HEX0<=HEX0_S;
+HEX1<=HEX1_S;
+HEX2<=HEX2_S;
+Sum<=R_S; 
+Cy<= CY_S;
+
+end structural;

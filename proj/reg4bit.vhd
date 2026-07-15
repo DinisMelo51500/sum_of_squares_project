@@ -1,0 +1,34 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+
+entity reg4bit is
+port(
+x : in std_logic_vector(3 downto 0);
+clk : in std_logic;
+RST : in std_logic;
+EN : in std_logic;
+xout : out std_logic_vector(3 downto 0)
+);
+end reg4bit;
+
+architecture structural of reg4bit is
+component FFD is
+PORT(	CLK : in std_logic;
+		RESET : in STD_LOGIC;
+		SET : in std_logic;
+		D : IN STD_LOGIC;
+		EN : IN STD_LOGIC;
+		Q : out std_logic
+		);
+END component;
+
+begin
+T0: FFD port map(CLK => clk, RESET => RST, SET => '0', D => x(0), EN => EN, Q => xout(0));
+
+T1: FFD port map(CLK => clk, RESET => RST, SET => '0', D => x(1), EN => EN, Q => xout(1));
+
+T2: FFD port map(CLK => clk, RESET => RST, SET => '0', D => x(2), EN => EN, Q => xout(2));
+
+T3: FFD port map(CLK => clk, RESET => RST, SET => '0', D => x(3), EN => EN, Q => xout(3));
+
+end structural;

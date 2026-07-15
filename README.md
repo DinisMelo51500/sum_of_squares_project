@@ -1,2 +1,3 @@
-# sum_of_squares_project
-...
+Authors:
+- Dinis Melo
+- Francisco Mota

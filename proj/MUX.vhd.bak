@@ -1,0 +1,22 @@
+LIBRARY IEEE;
+use IEEE.std_logic_1164.all;
+
+entity MUX is
+port(
+	A, B : in STD_LOGIC_VECTOR(3 downto 0);
+	Dec_Mux : in STD_LOGIC;
+	Y : out STD_LOGIC_VECTOR(3 downto 0)
+);
+end MUX;
+
+architecture structural of MUX is
+
+begin
+
+Y(0)<= (A(0) AND Dec_Mux) OR (NOT (Dec_Mux) AND B(0));
+Y(1)<= (A(1) AND Dec_Mux) OR (NOT (Dec_Mux) AND B(1));
+Y(2)<= (A(2) AND Dec_Mux) OR (NOT (Dec_Mux) AND B(2));
+Y(3)<= (A(3) AND Dec_Mux) OR (NOT (Dec_Mux) AND B(3));
+
+
+end structural;

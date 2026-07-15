@@ -1,0 +1,44 @@
+library ieee;
+use ieee.std_logic_1164.all;
+
+entity X2 is
+port(
+	X:in std_logic_vector(3 downto 0);
+	X2X:out std_logic_vector(7 downto 0)
+);
+end X2;
+
+architecture structural of X2 is
+component adder8bit is
+port(
+
+      A  : in std_logic_vector(7 downto 0);
+      B  : in std_logic_vector(7 downto 0);
+      Ci : in std_logic;
+      S  : out std_logic_vector(7 downto 0);
+      C0 : out std_logic
+
+);
+end component;
+
+signal X_Signal,XX0,XX1,XX2,XX3,S_Signal1,S_Signal2,S_Signal3: std_logic_vector(7 downto 0);
+signal X1 , X2 , X3, X0 : std_logic;
+begin
+X_Signal<= ('0'&'0'&'0'&'0'&X(3)&X(2)&X(1)&X(0));
+X1<= X(1);
+X2<= X(2);
+X3<= X(3);
+X0<= X(0);
+XX0<=('0' & '0' & '0' & '0' & (X3 and X0) & (X2 and X0) & (X1 and X0) & X0 );
+XX1<=('0'&'0'&'0'& (X3 and X1) & (X2 and X1) & X1 & (X0 and X1) & '0');
+XX2<=('0'&'0'& (X3 and X2) & X2  & (X1 and X2) & (X0 and X2) & '0' & '0');
+XX3<=('0'& X3 & (X2 and X3) & (X1 and X3) & (X0 and X3) & '0'  & '0' & '0');
+
+U1 : adder8bit port map (A=>XX0,B=>XX1,Ci=>'0',S=>S_Signal1 );
+U2 : adder8bit port map (A=>XX2,B=>XX3,Ci=>'0',S=>S_Signal2 );
+U3 : adder8bit port map (A=>S_Signal1,B=>S_Signal2,Ci=>'0',S=>S_Signal3 );
+	
+X2X <= S_Signal3;
+end structural;
+
+ 

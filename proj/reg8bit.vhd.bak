@@ -1,0 +1,36 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+
+entity reg8bit is
+port(
+x8 : in std_logic_vector(7 downto 0);
+clk : in std_logic;
+RST : in std_logic;
+EN : in std_logic;
+xout8 : out std_logic_vector(7 downto 0)
+);
+end reg8bit;
+
+
+architecture structural of reg8bit is
+component reg4bit is
+port(
+x : in std_logic_vector(3 downto 0);
+clk : in std_logic;
+RST : in std_logic;
+EN : in std_logic;
+xout : out std_logic_vector(3 downto 0)
+);
+end component;
+
+
+
+signal X_Signal1,X_Signal2,Xout_Signal1,Xout_Signal2 : std_logic_vector(3 downto 0);
+begin
+X_Signal1<= (x8(3) & x8(2) & x8(1) & x8(0));
+X_Signal2<= (x8(7) & x8(6) & x8(5) & x8(4));
+U1 : reg4bit port map(x=>X_Signal1,clk=>clk,RST=>RST,EN=>EN,xout => Xout_Signal1);
+U2 : reg4bit port map(x=>X_Signal2,clk=>clk,RST=>RST,EN=>EN,xout => Xout_Signal2);
+xout8<=(Xout_Signal2(3) & Xout_Signal2(2) & Xout_Signal2(1) & Xout_Signal2(0) & Xout_Signal1(3) & Xout_Signal1(2) & Xout_Signal1(1) & Xout_Signal1(0));
+
+end structural;

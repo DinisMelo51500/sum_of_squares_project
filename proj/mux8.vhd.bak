@@ -1,0 +1,46 @@
+ LIBRARY ieee;
+USE ieee.std_logic_1164.all;
+
+entity mux8 is
+	port
+	(
+--Input
+
+		A : in std_logic_vector (7 downto 0);
+		B : in std_logic_vector (7 downto 0);
+		S : in std_logic;
+		
+--Output
+
+		Y : out std_logic_vector (7 downto 0)
+	);
+	
+end mux8;
+
+architecture structural of mux8 is
+component MUX is
+	port
+	(
+--Input
+
+		A : in std_logic_vector (3 downto 0);
+		B : in std_logic_vector (3 downto 0);
+		S : in std_logic;
+		
+--Output
+
+		Y : out std_logic_vector (3 downto 0)
+	);
+	
+end component;
+
+signal A_Signal1,A_Signal2,B_Signal1,B_Signal2,Y_Signal1,Y_Signal2 : std_logic_vector(3 downto 0);
+
+begin
+
+U1: MUX port map(A=>A(3 downto 0),B=>B(3 downto 0),S=>S,Y=>Y_Signal1);
+U2: MUX port map(A=>A(7 downto 4),B=>B(7 downto 4),S=>S,Y=>Y_Signal2);
+Y(3 downto 0)<= Y_Signal1;
+Y(7 downto 4)<= Y_Signal2;
+
+end structural;
